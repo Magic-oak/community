@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <link rel="icon" href="https://static.nowcoder.com/images/logo_87_87.png"/>
@@ -7,12 +7,20 @@
 </head>
 <body>
 	<div>
+<!--		<p>-->
+<!--			<b>xxx@xxx.com</b>, 您好!-->
+<!--		</p>-->
+<!--		<p>-->
+<!--			您正在找回牛客账号的密码, 本次操作的验证码为 <b>u5s6dt</b> , -->
+<!--			有效时间5分钟, 请您及时进行操作!-->
+<!--		</p>-->
 		<p>
-			<b>xxx@xxx.com</b>, 您好!
+			<b th:text="${email}">xxx@xxx.com</b>, 您好!
 		</p>
 		<p>
-			您正在找回牛客账号的密码, 本次操作的验证码为 <b>u5s6dt</b> , 
-			有效时间5分钟, 请您及时进行操作!
+			您正在找回牛客账号的密码，本次操作的验证码为
+			<p th:text="${verifyCode}">验证码</p>,
+			激活您的牛客账号!
 		</p>
 	</div>
 </body>
