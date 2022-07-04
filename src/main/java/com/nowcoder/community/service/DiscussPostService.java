@@ -26,6 +26,7 @@ public class DiscussPostService {
      * @return 返回post列表
      */
     public List<DiscussPost> findDiscussPosts(int userId, int offset, int limit) {
+
         return discussPostMapper.selectDiscussPosts(userId, offset, limit, 0);
     }
 

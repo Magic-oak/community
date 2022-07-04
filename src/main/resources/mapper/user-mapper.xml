@@ -26,7 +26,6 @@
     </select>
 
 <!--    #{}是占位符，用于获取对应接口方法的参数值-->
-
     <insert id="insertUser" parameterType="User" keyProperty="id">
         insert into user (<include refid="insertFields"></include>)
         values(#{username}, #{password}, #{salt}, #{email}, #{type}, #{status}, #{activationCode}, #{headerUrl}, #{createTime})

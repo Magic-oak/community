@@ -49,6 +49,7 @@ public class LoginController implements CommunityConstant {
 
     private static final Logger logger = LoggerFactory.getLogger("LoginController");
 
+    // 为了简化读取properties文件中的配置值，spring支持@Value注解的方式来获取，这种方式大大简化了项目配置，提高业务中的灵活性。
     @Value("${server.servlet.context-path}")
     private String contextPath;
 

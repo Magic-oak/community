@@ -51,10 +51,10 @@ public class HomeController {
                 discussPosts.add(map);
             }
         }
-        System.out.println(discussPosts.size());
-        for (int i = 0; i < discussPosts.size(); i++) {
-            System.out.println(discussPosts.get(i).get("post"));
-        }
+//        System.out.println(discussPosts.size());
+//        for (int i = 0; i < discussPosts.size(); i++) {
+//            System.out.println(discussPosts.get(i).get("post"));
+//        }
         model.addAttribute("discussPosts", discussPosts);
         return "/index";
     }
