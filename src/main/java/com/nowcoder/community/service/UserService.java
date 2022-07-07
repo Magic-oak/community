@@ -170,6 +170,20 @@ public class UserService implements CommunityConstant {
         loginTicketMapper.updateStatus(ticket, 1);
     }
 
+    /**
+     * 改变用户头像（根据用户id和新的头像地址，更新用户表中的头像字段
+     * @param userId 用户id
+     * @param headerUrl 用户新头像地址
+     * @return 返回操作成功数据库表更新行数
+     */
+    public int updateHeaderUrl(int userId, String headerUrl) {
+        return userMapper.updateHeader(userId, headerUrl);
+    }
+
+    public LoginTicket findLoginTicket(String ticket) {
+        return loginTicketMapper.selectByTicket(ticket);
+    }
+
 
     // 更新密码
     public Map<String, Object> updatePassword(String email, String password) {

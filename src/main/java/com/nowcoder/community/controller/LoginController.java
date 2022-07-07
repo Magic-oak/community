@@ -124,6 +124,14 @@ public class LoginController implements CommunityConstant {
     }
 
     /**
+     * 上面已经有一个login方法了，这里又写一个login方法，是否会冲突呢？如果method也相同，path也相同，那就回冲突，但是如果method不同，
+     * 比如上面是Get方法，这里是Post方法，那么就不会冲突。
+     *
+     * 关于验证码需要提一句：用户打开登录界面，服务端会生成一个验证码，把这个验证码存放到服务端的session中，然后再把验证码发送到客户端。客户端用户
+     * 输入登录信息（包括用户输入的验证码），点击提交发送到服务端，服务端取出验证码code，与服务端session中保存的验证码kaptcha进行比较，如果相同
+     * 则进行下一步验证。
+     *
+     * 方法参数是需要页面表单传进来的一些参数，
      * @param username   post表单提交到服务端的用户名
      * @param password   post表单提交到服务端的密码
      * @param code       验证码
@@ -145,10 +153,17 @@ public class LoginController implements CommunityConstant {
         int expired_seconds = rememberMe ? CommunityConstant.REMEMBER_EXPIRED_SECOND : CommunityConstant.DEFAULT_EXPIRED_SECOND;
         Map<String, Object> map = userService.login(username, password, expired_seconds);
         if (map.containsKey("ticket")) {
+            // 给客户端发送一个cookie
             Cookie cookie = new Cookie("ticket", map.get("ticket").toString());
+            // 我们通常需要给cookie设置有效路径，用户登录以后，它的凭证有效范围应该是包含在整个项目内，访问项目的任何页面登录状态都应该是有效的。
             cookie.setPath(contextPath);
+            // 设置cookie的过期时间
             cookie.setMaxAge(expired_seconds);
+            //把cookie发送给页面，在响应时就会发送给浏览器
             response.addCookie(cookie);
+
+            // 登录成功后为什么是重定向到首页而不是return "/index"?
+            // 原因：你当前的请求是登录，却给浏览器返回了首页的模板，很让人困惑的，重定向是重新发起了一个请求，浏览器的地址发生了改变，逻辑是严谨的。
             return "redirect:/index";
         } else {
             model.addAttribute("usernameMsg", map.get("usernameMsg"));
@@ -158,9 +173,12 @@ public class LoginController implements CommunityConstant {
 
     }
 
+    // 退出不需要通过表单向浏览器提交什么数据，所以用GET请求就可以。
+    // 通过@CookieValue注解要求SpringMVC把它注入进来
     @RequestMapping(path = "/logout", method = RequestMethod.GET)
     public String logout(@CookieValue("ticket") String ticket) {
         userService.logout(ticket);
+        // 默认重定向到GET请求的login方法
         return "redirect:/login";
     }
 
@@ -190,6 +208,9 @@ public class LoginController implements CommunityConstant {
         session.setAttribute("verifyCode", code);
         return CommunityUtil.getJSONString(0);
     }
+
+    // 上传用户头像的操作在表现层实现，因为处理（头像）文件要用的是MultipartFile对象，而这个对象是属于SpringMVC的对象，是表现层的对象，如果
+    // 把它传给Service层，那么Service层就和表现层有了耦合，这样不好， 所以就在表现层做上传头像的操作了。业务层只处理更新路径的操作。
 
     // 重置密码
     @RequestMapping(path = "/forget/password", method = RequestMethod.POST)

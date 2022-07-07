@@ -20,14 +20,14 @@ public class AlphaInterceptor implements HandlerInterceptor {
 
     private static final Logger logger = LoggerFactory.getLogger(AlphaInterceptor.class);
 
-    // 这个方法在controller执行请求的代码之前执行。handler是拦截的目标
+    // 这个方法在controller执行请求的代码之前执行。handler是拦截的目标,它是方法， 你访问那个方法，它就拦截那个方法。
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         logger.debug("preHandle: " + handler.toString());
         return true;
     }
 
-    // 这个方法在调用完controller之后执行
+    // 这个方法在调用完controller之后模板之前执行
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
         logger.debug("postHandle" + handler.toString());
